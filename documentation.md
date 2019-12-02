@@ -8,6 +8,14 @@ title: SirixDB - Documentation
 
 [Go directly to the API documentation](#api-documentation) or [to the publications](#publications).
 
+# Getting Started
+## Terminology
+
+(TODO: Provide a list of terms for people with no programming/data-science background. i.e. How should we define "data in-place" or "copy-on-write operation"?)
+
+*This could also be its own page, making it easier for new contributors to get started.*
+***This could also be notated as a good starting place.***
+
 ## Introduction
 Usually, database systems either overwrite data in-place or do a copy-on-write operation followed by the removal of the outdated data. The latter may be some time later from a background process. Data, however, naturally evolves. It is often of great value to keep the history of our data. We, for instance, might record the payroll of an employee on the first of March in 2019. Let’s say it’s 5000€ / month. Then as of the fifteenth of April, we notice, that the recorded payroll was wrong and correct it to 5300€. Now, what’s the answer to what the salary was on March, first in 2019? Database Systems, which only preserve the most recent version, don’t even know that the payroll wasn’t right. Our answer to this question depends on what source we consider most authoritative: the record or reality? The fact that they disagree effectively splits this payroll event into two tracks of time, rendering neither source entirely accurate. Temporal database systems such as SirixDB help answer questions such as these easily. We provide at all times the transaction time, which SirixDB sets, once a transaction commits (when is a fact valid in the database / the record). Application or valid time has to be set by the application itself (when is a fact valid in the real world/reality?).
 
