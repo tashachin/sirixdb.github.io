@@ -9,7 +9,17 @@ title: SirixDB - Documentation
 [Go directly to the API documentation](#api-documentation) or [to the publications](#publications).
 
 ## Introduction
-Usually, database systems either overwrite data in-place or do a copy-on-write operation followed by the removal of the outdated data. The latter may be some time later from a background process. Data, however, naturally evolves. It is often of great value to keep the history of our data. We, for instance, might record the payroll of an employee on the first of March in 2019. Let’s say it’s 5000€ / month. Then as of the fifteenth of April, we notice, that the recorded payroll was wrong and correct it to 5300€. Now, what’s the answer to what the salary was on March, first in 2019? Database Systems, which only preserve the most recent version, don’t even know that the payroll wasn’t right. Our answer to this question depends on what source we consider most authoritative: the record or reality? The fact that they disagree effectively splits this payroll event into two tracks of time, rendering neither source entirely accurate. Temporal database systems such as SirixDB help answer questions such as these easily. We provide at all times the transaction time, which SirixDB sets, once a transaction commits (when is a fact valid in the database / the record). Application or valid time has to be set by the application itself (when is a fact valid in the real world/reality?).
+Traditional database systems will either overwrite data in-place or do a copy-on-write operation, followed by the removal of out-of-date data. The latter might take place some time later from a background process, but data naturally evolves. It's valuable to keephistoric data. 
+
+For example, we might record the payroll of an employee on the first of March in 2019: Let’s say it’s 5000€ / month. On April 15th, we notice that the recorded payroll was wrong and correct it to 5300€. 
+
+**What was our salary on March 1st, 2019?**
+
+The answer depends on what source we consider more authoritative: Our record-keeping, or the actual live data.
+
+The fact that they don't match up effectively splits this payroll event into two tracks of time, meaning neither source is entirely accurate. 
+
+Temporal database systems like SirixDB help answer this question: We provide, at all times, the transaction time once a transaction commits (when is a fact valid in the database / the record). Application or valid time has to be set by the application itself (when is a fact valid in the real world/reality?).
 
 ### Data Audits
 Thus, one usage scenario for SirixDB is data auditing. Unlike other database systems, it is designed from the ground up to retain old data. It keeps track of past revisions in a specialized index structure for (bi)temporal data. SirixDB uses a novel sliding snapshot versioning algorithm by default to version data pages. It balances read- and write-performance while avoiding any peaks.
@@ -22,7 +32,11 @@ Data audits are about how specific records have changed. Time Travel queries can
 For all of the use-cases we mentioned earlier: We can revert to a specific point in time where everything was in a known good state and commit the revision again. Or we might select a particular record, correct the error and commit a new revision.
 
 ## SirixDB
-SirixDB is a storage system, which brings versioning to a sub-file granular level while taking full advantage of flash-based drives as SSDs. As such, per revision as well as per page deltas are stored. Time-complexity for retrieval of records and the storage are logarithmic (`O(log n)`). Space complexity is linear (`O(n)`). Currently, we provide several APIs which are layered. A very low-level page-API, which handles the storage and retrieval of records on a per page-fragment level.  A transactional cursor-based API to store and navigate through records (currently XML as well as JSON nodes) on top. A DOM-alike node layer for simple in-memory processing of these nodes, which is used by Brackit, a sophisticated XQuery processor. And last but not least a RESTful asynchronous HTTP-API. SirixDB provides
+SirixDB is a storage system, which brings versioning to a sub-file granular level while taking full advantage of flash-based drives as SSDs. As such, per revision as well as per page deltas are stored. Time-complexity for retrieval of records and the storage are logarithmic (`O(log n)`). Space complexity is linear (`O(n)`). 
+
+Currently, we provide several APIs which are layered: A very low-level page-API, which handles the storage and retrieval of records on a per page-fragment level; a transactional cursor-based API to store and navigate through records (currently XML as well as JSON nodes) on top; a DOM-alike node layer for simple in-memory processing of these nodes, which is used by Brackit, a sophisticated XQuery processor; and a RESTful asynchronous HTTP-API. 
+
+SirixDB provides:
 
 1. The current revision of the resource or any subset thereof
 2. The full revision history of the resource or any subset thereof
